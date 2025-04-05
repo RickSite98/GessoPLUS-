@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gesso PLUS - Orçamento</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, #121212, #1c1c1c, #2a2a2a);
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #1e1e1e;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo h1 {
+      color: #ff0000;
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .logo p {
+      margin-top: 5px;
+      color: #ccc;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      background: #333;
+      color: white;
+      font-size: 14px;
+    }
+
+    .service-box {
+      margin-top: 20px;
+    }
+
+    .service {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #2a2a2a;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .service input[type="number"] {
+      width: 100px;
+      margin-left: 10px;
+    }
+
+    #subtotal {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: right;
+      font-weight: bold;
+      color: #ff4b4b;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background: #ff0000;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>Gesso PLUS</h1>
+      <p>Soluções em decoração a gesso</p>
+    </div>
+
+    <label for="nome">Seu nome:</label>
+    <input type="text" id="nome" placeholder="Digite seu nome" />
+
+    <label for="prazo">Quando deseja o serviço?</label>
+    <select id="prazo">
+      <option value="Urgente">Urgente</option>
+      <option value="Próxima semana">Próxima semana</option>
+      <option value="Próximo mês">Próximo mês</option>
+    </select>
+
+    <div class="service-box">
+      <label>Serviços desejados (insira a metragem):</label>
+
+      <div class="service">
+        <span>Forro</span>
+        <input type="number" id="forro" placeholder="m²" min="0" />
+      </div>
+
+      <div class="service">
+        <span>Drywall</span>
+        <input type="number" id="drywall" placeholder="m²" min="0" />
+      </div>
+
+      <div class="service">
+        <span>Molduras</span>
+        <input type="number" id="molduras" placeholder="m" min="0" />
+      </div>
+
+      <div class="service">
+        <span>Boiserie</span>
+        <input type="number" id="boiserie" placeholder="m" min="0" />
+      </div>
+
+      <div class="service">
+        <span>Sanca</span>
+        <input type="number" id="sanca" placeholder="m" min="0" />
+      </div>
+    </div>
+
+    <div id="subtotal">Subtotal: R$ 0,00</div>
+
+    <button onclick="enviarOrcamento()">Solicitar Orçamento no WhatsApp</button>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => {
+      input.addEventListener("input", calcularSubtotal);
+    });
+
+    function calcularSubtotal() {
+      let total = 0;
+
+      const forro = parseFloat(document.getElementById("forro").value) || 0;
+      const drywall = parseFloat(document.getElementById("drywall").value) || 0;
+      const molduras = parseFloat(document.getElementById("molduras").value) || 0;
+      const boiserie = parseFloat(document.getElementById("boiserie").value) || 0;
+      const sanca = parseFloat(document.getElementById("sanca").value) || 0;
+
+      total += forro * 80;
+      total += molduras * 20;
+      total += boiserie * 25;
+      total += sanca * 75;
+
+      if (drywall > 0) {
+        total += drywall * (drywall >= 30 ? 85 : 90);
+      }
+
+      document.getElementById("subtotal").textContent = `Subtotal: R$ ${total.toFixed(2)}`;
+    }
+
+    function enviarOrcamento() {
+      const nome = document.getElementById("nome").value.trim();
+      if (!nome) {
+        alert("Por favor, insira seu nome.");
+        return;
+      }
+
+      const prazo = document.getElementById("prazo").value;
+      const forro = document.getElementById("forro").value;
+      const drywall = document.getElementById("drywall").value;
+      const molduras = document.getElementById("molduras").value;
+      const boiserie = document.getElementById("boiserie").value;
+      const sanca = document.getElementById("sanca").value;
+      const subtotal = document.getElementById("subtotal").textContent;
+
+      let servicos = "";
+
+      if (forro) servicos += `Forro: ${forro} m²\n`;
+      if (drywall) servicos += `Drywall: ${drywall} m²\n`;
+      if (molduras) servicos += `Molduras: ${molduras} m\n`;
+      if (boiserie) servicos += `Boiserie: ${boiserie} m\n`;
+      if (sanca) servicos += `Sanca: ${sanca} m\n`;
+
+      const mensagem = `Orçamento do cliente ${nome}:\n\n${servicos}\nData estimada: ${prazo}\n${subtotal}\n\nPodemos marcar a instalação?`;
+
+      const telefone = "5517992485102";
+      const url = `https://api.whatsapp.com/send?phone=${telefone}&text=${encodeURIComponent(mensagem)}`;
+
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
